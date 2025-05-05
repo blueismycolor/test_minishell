@@ -41,7 +41,7 @@
 # define ERR_SYN			"syntax error in expression.\n"	// Manque un i++ ou qqch dans le genre
 # define ERR_FD				"bad file descriptor.\n"		// Fermeture accidentelle dun fd
 # define SUCCESS			0
-# define ERROR				1
+# define ERROR				-1
 
 typedef enum s_type
 {
@@ -66,16 +66,26 @@ typedef enum s_quote
 	DOUBLE
 }	t_quote;
 
-typedef struct s_token
+typedef struct s_redir
 {
-	char	*str;	// "cat", "|", "input.txt"
-	t_type	type;	// CMD. PIPE,TRUNC etc.
-	t_quote	quote;
-	struct s_token	*next;
-	struct s_token	*prev;
-}	t_token;
+	char			*filename;
+	t_type			type;
+	struct s_redir	*next;
+}	t_redir;
 
-
+typedef struct s_cmd
+{
+	char			*cmd;
+	bool			is_builtin;
+	char			**args;
+	int				nb_params;
+	bool			has_redir;
+	t_redir			*redir;
+	t_quote			quote;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+	t_type			type;
+}	t_cmd;
 
 //PARSING UTILS
 
@@ -83,8 +93,8 @@ int		is_space(char c);
 
 //TOKENS
 t_type	get_token_type(char *str);
-t_token	*create_token(t_token **head, char *str, t_type type, t_quote quote);
-bool	check_eof(char *input, char *current_token, t_type type, t_token **tokens);
+t_cmd	*create_and_add_token(t_cmd **head, char *str, t_type type, t_quote quote);
+bool	check_eof(char *input, char *current_cmd, t_type type, t_cmd **tokens);
 bool	check_single_operator(char c);
 bool	check_double_operator(char *input);
 
@@ -92,7 +102,9 @@ bool	check_double_operator(char *input);
 
 //QUOTES
 t_quote	get_quote_type(char *str);
-int		check_quotes(char *str);
+int		check_quote_state(char *str);
+int		check_quotes(char *input, int i);
+int		get_nbr_tokens(char *input);
 
 //EXEC
 void	msg_error(char *msg);

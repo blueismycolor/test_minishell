@@ -28,16 +28,15 @@ t_type get_token_type(char *str)
 		return (CMD);
 }
 
-
-t_token *create_token(t_token **head, char *str, t_type type, t_quote quote)
+t_cmd *create_and_add_token(t_cmd **head, char *str, t_type type, t_quote quote)
 {
-	t_token	*new_token;
-	t_token	*tmp;
+	t_cmd	*new_token;
+	t_cmd	*tmp;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = malloc(sizeof(t_cmd));
 	if (!new_token)
 		return (NULL);
-	new_token->str = ft_strdup(str);
+	new_token->cmd = ft_strdup(str);
 	new_token->type = type;
 	new_token->quote = quote;
 	new_token->next = NULL;

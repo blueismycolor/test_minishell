@@ -19,7 +19,7 @@
 	current_token[0] = '\0'; //sonrasinda kullanilmasin diye temizle.
 */
 
-bool	check_eof(char *input, char *current_token, t_type type, t_token **tokens)
+bool	check_eof(char *input, char *current_token, t_type type, t_cmd **tokens)
 {
 	int		i;
 	
@@ -29,7 +29,7 @@ bool	check_eof(char *input, char *current_token, t_type type, t_token **tokens)
 		if (current_token && *current_token)
 		{
 			type = get_token_type(current_token);
-			create_token(tokens, current_token, type, NONE);
+			create_and_add_token(tokens, current_token, type, NONE);
 			current_token[0] = '\0';
 		}
 			
@@ -52,8 +52,9 @@ bool	check_double_operator(char *input)
 	if (ft_strncmp(input, "<<", 2) == 0 && input[2] == '\0')
 		return (true);
 	return (false);
-	
 }
+
+bool	handle_quotes()
 
 
 // t_token	handle_quotes();

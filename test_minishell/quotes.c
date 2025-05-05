@@ -12,23 +12,41 @@
 
 #include "minishell.h"
 
-t_quote	get_quote_type(char *str)
-{
-	int	i;
+/*
+	input stringinde i konumundaki karakterden itibaren tirnak icinde gecen kisimlari
+	atlayarak tirnak blogunun bittigi yerin indeksini dondurur.
+	amac : token parcalama asamasinda "hello | world" gibi tirnak icindeki ozel karakterlerin
+	split edilmemesini saglamak
+*/
 
-	i = 0;
-	while (str[i])
+int	check_quotes(char *input, int i)
+{
+	while (input[i] && input[i] != '|' && input[i] != '>' && input[i] != '<')
 	{
-		if (str[i] == '\'')
-			return (SINGLE);
-		if (str[i] == '\"')
-			return (DOUBLE);
+		if (input[i] == '\'')
+		{
+			i++;
+			while (input[i] && input[i] != '\'')
+				i++;
+			if (input[i] == '\0')
+				return (ERROR);
+		}
+		else if (input[i] == '\"')
+		{
+			i++;
+			while (input[i] && input[i] != '\"')
+				i++;
+			if (input[i] == '\0')
+				return (ERROR);
+		}
 		i++;
 	}
-	return (NONE);
+	return (i);
 }
-
-int	check_quotes(char *input)
+/*
+	input stringde tum acilan tirnaklarin duzgun kapanip kapanmadigini kontrol eder
+*/
+int	check_quote_state(char *input)
 {
 	int i;
 	t_quote quote_state;
@@ -50,8 +68,27 @@ int	check_quotes(char *input)
 	}
 	if (quote_state != NONE)
 	{
-		msg_error(ERR_QUOTE);
+		msg_error(ERR_QUOTE_OPEN);
 		return(ERROR);
 	}
 	return (SUCCESS);
 }
+t_quote	get_quote_type(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			return (SINGLE);
+		if (str[i] == '\"')
+			return (DOUBLE);
+		i++;
+	}
+	return (NONE);
+}
+
+
+
+

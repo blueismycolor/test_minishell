@@ -26,3 +26,4 @@ int	skip_space(char *input)
 		i++;
 	return(i);
 }
+
