@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokens.c                                           :+:      :+:    :+:   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:55 by aeudes            #+#    #+#             */
-/*   Updated: 2025/04/30 13:49:23 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/07 16:34:41 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,24 @@ t_type get_token_type(char *str)
 	else if (ft_strncmp(str, "|", 1) == 0)
 		return (PIPE);
 	else
-		return (CMD);
+		return (str);
 }
 
-t_cmd *create_and_add_token(t_cmd **head, char *str, t_type type, t_quote quote)
-{
-	t_cmd	*new_token;
-	t_cmd	*tmp;
 
-	new_token = malloc(sizeof(t_cmd));
+t_token 	*create_token(t_token **head, char *str, t_type type, t_quote quote)
+{
+	t_token	*new_token;
+	t_token	*tmp;
+
+	new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
-	new_token->cmd = ft_strdup(str);
+	new_token->str = ft_strdup(str);
+	if (!new_token->str)
+		return (NULL);
 	new_token->type = type;
 	new_token->quote = quote;
 	new_token->next = NULL;
-	new_token->prev = NULL;
 	if (!*head)
 		*head = new_token;
 	else
@@ -49,7 +51,6 @@ t_cmd *create_and_add_token(t_cmd **head, char *str, t_type type, t_quote quote)
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new_token;
-		new_token->prev = tmp;
 	}
 	return (new_token);
 }
