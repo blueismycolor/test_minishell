@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:53:05 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/07 16:35:13 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/07 19:26:24 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ typedef enum s_quote
 
 typedef struct s_token
 {
-	char *str;
+	char	*str;
 	t_type	type;
 	t_quote	quote;
+	bool	has_expansion;
 	struct s_token *next;
 }	t_token;
 
@@ -104,14 +105,16 @@ typedef struct s_data
 //PARSING UTILS
 int		is_space(char c);
 int		skip_space(char *input);
+bool 	is_valid_operator(char *input);
 
 //TOKENS
 t_type	get_token_type(char *str);
 t_token	*create_token(t_token **head, char *str, t_type type, t_quote quote);
 bool	check_eof(char *input, char **current_token, t_token **tokens);
-bool	check_single_operator(char c);
-bool	check_double_operator(char *input);
+bool	is_operator(char c);
+bool	is_double_operator(char *input);
 bool 	quoted_token(char **input, char *current_token);
+bool	has_expansion(char *str, t_quote quote);
 
 
 //QUOTES

@@ -6,18 +6,12 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:08:26 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/07 16:34:15 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/07 21:30:29 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-	cette fonction verifie si la fin d'une ligne d'entree a ete atteinte
-	si l'entree est terminee comme EOF et qu'il existe encore un current_token
-	en cours de traitement, ce token est converti en une structure t_cmd
-	et ajoute a la liste des tokens.
-*/
 bool check_eof(char *input, char **current_token, t_token **tokens)
 {
 	t_type type;
@@ -36,7 +30,13 @@ bool check_eof(char *input, char **current_token, t_token **tokens)
 	return false;
 }
 
-bool	check_double_operator(char *input)
+bool	is_operator(char c)
+{
+	return (c == '|' || c == '>' || c == '<');
+}
+
+
+bool	is_double_operator(char *input)
 {
 	if (!input)
 		return (false);
@@ -47,12 +47,6 @@ bool	check_double_operator(char *input)
 	return (false);
 	
 }
-
-bool	check_single_operator(char c)
-{
-	return (c == '|' || c == '>' || c == '<');
-}
-
 
 bool quoted_token(char **input, char *current_token)
 {
@@ -80,8 +74,22 @@ bool quoted_token(char **input, char *current_token)
 	return (true);
 }
 
+bool	has_expansion(char *str, t_quote quote)
+{
+	if (quote == SINGLE)
+		return (false);
+	return (ft_strchr(str, '$') != NULL);
+}
 
-// handle expansion
+
+
+/*
+	HAS_EXPANSION
+	eger tek tirnak ise icindeki her sey oldugu gibi disari cikar
+	ama eger cift tirnaksa ve icerisinde $ isareti var ise burada expansion var demektir.
+	strchr fonksiyonu ile $ sembolu aranir, eger var ise bu karakterin adresi dondurulur
+	ve true doner.
+*/
 
 /*	QUOTED_TOKEN
 	Amacimiz: tirnak ile basliyorsa icerigi al ve current token'a yaz.
@@ -95,4 +103,18 @@ bool quoted_token(char **input, char *current_token)
 	- tirnakla karsilasincaya kadar her karakteri current_token icerisine kopyaliyoruz.
 	- eger tirnaga ulastiysak, bu tirnagi atliyoruz.
 	- kaldigimiz yerden devam edebilmek icin *input = current_input_pos; aksi halde ayni yeri 
+*/
+
+/*
+	if (is_single_operator(token_str[0] && token_len == 1))
+	 {
+	 	token_type = token_operator
+	 }
+*/
+
+/*	CHECK_EOF
+	cette fonction verifie si la fin d'une ligne d'entree a ete atteinte
+	si l'entree est terminee comme EOF et qu'il existe encore un current_token
+	en cours de traitement, ce token est converti en une structure t_cmd
+	et ajoute a la liste des tokens.
 */
