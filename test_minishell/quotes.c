@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:24 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/07 16:34:56 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/12 15:11:42 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	check_quote_state(char *input)
 	
 	i = 0;
 	quote_state = NONE;
-	
 	while (input[i] != '\0') 
 	{
 		if (input[i] == '\'' && quote_state == NONE)

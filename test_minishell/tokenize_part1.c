@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:08:26 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/07 21:30:29 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/12 16:23:43 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,6 @@ bool check_eof(char *input, char **current_token, t_token **tokens)
 		return true;
 	}
 	return false;
-}
-
-bool	is_operator(char c)
-{
-	return (c == '|' || c == '>' || c == '<');
-}
-
-
-bool	is_double_operator(char *input)
-{
-	if (!input)
-		return (false);
-	if (ft_strncmp(input, ">>", 2) == 0 && input[2] == '\0')
-		return (true);
-	if (ft_strncmp(input, "<<", 2) == 0 && input[2] == '\0')
-		return (true);
-	return (false);
-	
 }
 
 bool quoted_token(char **input, char *current_token)
@@ -74,12 +56,36 @@ bool quoted_token(char **input, char *current_token)
 	return (true);
 }
 
-bool	has_expansion(char *str, t_quote quote)
+
+bool	has_expansion(char *str)
 {
+	t_quote quote;
+	
+	quote = NONE;
 	if (quote == SINGLE)
 		return (false);
 	return (ft_strchr(str, '$') != NULL);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
