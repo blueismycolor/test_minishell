@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:53:05 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/12 15:38:24 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:41:11 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define ERR_SYN				"syntax error in expression.\n"	// Manque un i++ ou qqch dans le genre
 # define ERR_FD					"bad file descriptor.\n"		// Fermeture accidentelle dun fd
 # define SUCCESS				0
-# define ERROR					1
+# define ERROR					-1
 
 
 typedef enum s_type
@@ -70,6 +70,7 @@ typedef struct s_token
 	char	*str;
 	t_type	type;
 	t_quote	quote;
+	bool	is_null;
 	bool	has_expansion;
 	struct s_token *next;
 }	t_token;
@@ -109,22 +110,27 @@ typedef struct s_data
 //PARSING UTILS
 int		is_space(char c);
 int		skip_space(char *input);
-bool 	is_valid_operator(char *input);
+
 
 //TOKENS
 t_type	get_token_type(char *str);
 t_token	*create_token(t_token **head, char *str, t_type type, t_quote quote);
 bool	check_eof(char *input, char **current_token, t_token **tokens);
 bool	is_single_redir(char c);
-bool	is_double_redir(char *input);
+bool	is_double_redir(char *input , int i);
 bool 	quoted_token(char **input, char *current_token);
-bool	has_expansion(char *str, t_quote quote);
-
+bool	operator_start(char c);
 
 //QUOTES
-int 	check_quotes(char *input, int i);
 t_quote	get_quote_type(char *str);
-int		check_quote_state(char *str);
+int		check_quote_state(char *input);
+
+
+bool 	validate_input(char *input, t_token *tokens);
+bool 	check_pipe_syntax(char *input);
+int		check_quote_syntax(char *input, int i);
+bool	check_redirection_syntax(t_token *tokens);
+int		process_input(char *input);
 
 
 //EXEC

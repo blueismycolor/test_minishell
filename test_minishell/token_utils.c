@@ -6,11 +6,12 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:55 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/07 21:28:42 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:27:58 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 t_type get_token_type(char *str)
 {
@@ -25,7 +26,7 @@ t_type get_token_type(char *str)
 	else if (ft_strncmp(str, "|", 1) == 0)
 		return (PIPE);
 	else
-		return (str);
+		return (CMD);
 }
 
 
@@ -39,9 +40,13 @@ t_token 	*create_token(t_token **head, char *str, t_type type, t_quote quote)
 		return (NULL);
 	new_token->str = ft_strdup(str);
 	if (!new_token->str)
+	{
+		free (new_token);
 		return (NULL);
+	}
 	new_token->type = type;
 	new_token->quote = quote;
+	new_token->has_expansion = false;
 	new_token->next = NULL;
 	if (!*head)
 		*head = new_token;
@@ -56,10 +61,6 @@ t_token 	*create_token(t_token **head, char *str, t_type type, t_quote quote)
 }
 
 
-int	count_tokens(char *input, int i, int count, t_quote quote)
-{
-	
-}
 
 /*
 create_token fonksiyonunda ft_stdup kullanmak gereklidir cunku

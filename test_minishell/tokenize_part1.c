@@ -6,13 +6,13 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:08:26 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/12 16:23:43 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/14 19:28:16 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool check_eof(char *input, char **current_token, t_token **tokens)
+bool check_eof(char *input, char **current_token, t_token **tokens) // 1
 {
 	t_type type;
 
@@ -30,7 +30,23 @@ bool check_eof(char *input, char **current_token, t_token **tokens)
 	return false;
 }
 
-bool quoted_token(char **input, char *current_token)
+bool	is_single_redir(char c) //2
+{
+	return (c == '>' || c == '<');
+}
+
+
+bool	is_double_redir(char *input, int i) //3
+{
+	if (!input[i] || !input[i + 1])
+		return (false);
+	if ((input[i] == '<' && input[i + 1] == '<')
+		|| (input[i] == '>' && input[i + 1] == '>'))
+			return (true);
+	return (false);
+}
+
+bool quoted_token(char **input, char *current_token) // 4
 {
 	int		i;
 	char	quote;
@@ -49,26 +65,41 @@ bool quoted_token(char **input, char *current_token)
 		current_input_pos++;	
 	}
 	if (*current_input_pos == quote)
-		current_input_pos++;
+		current_input_pos++;  
 
 	current_token[i] = '\0';
 	*input = current_input_pos;
 	return (true);
 }
 
-
-bool	has_expansion(char *str)
+bool	operator_start(char c)
 {
-	t_quote quote;
-	
-	quote = NONE;
-	if (quote == SINGLE)
-		return (false);
-	return (ft_strchr(str, '$') != NULL);
+	return (c == '<' || c == '>' || c == '|');
 }
 
+/*
+	eger bir karakter yeni bir operator baslatabiliyorsa onceki token sona erer
+	ve yeni bir operator tokeni baslatir.
+	|, <, >, <<, >> 
+	
+	ornegin echo test | grep ok
+	token 1 echo
+	token 2 test
+	token 3 | 
+	token 4 grep
+	token 5 ok
 
+	karakter karakter oku
+	eger bir karakter olabilir | < > kontrol et
+	eger evet onceki token bitir bu karakterler ile yeni bir token baslat
+	eger devam ederse << >> o zaman ayni token'a karakter eklemeye basla
 
+	bu sadece burada bir operator baslayabilir mi sorusunun cevabini verir true donerse
+	tokenizer fonksiyonunda sunu yapariz: 
+	if (operator_start(line[i]))
+		t_type type = get_operator_type(&line[i]);
+
+*/
 
 
 

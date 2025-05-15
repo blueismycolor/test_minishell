@@ -6,40 +6,54 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:14:33 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/12 16:19:13 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/15 13:00:24 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_operator_start(char c)
-{
-	return (c == '<' || c == '>' || c == '|'); // ???
-}
+// void	handle_whitespace_token(t_token **token_lst, int i)
+// {
+// 	int		start;
+// 	t_quote	stat;
 
-
-
-bool	handle_space()
-{
+// 	start = i;
+// 	stat = NONE;
 	
-}
+	
+	
+// }
+	
+
 /*
-	eger karakter bosluk ise ve tirnak icinde degilse yok sayilir
-	echo bonjour        tout le monde
-	tokens : "echo", "bonjour", "tout" "le" "monde"
-	arasinda kac bosluk olursa olsun, tek bosluk gibi islenir
+	tirnak icindeki bosluklar yok sayilir
+	tirnak disindaki bosluklar onceki tokeni bitirip yeni token baslatir
+	yukaridaki fonksiyon bosluk geldiginde cagirilir
+		tirnak icinde mi diye kontrol eder
+		tirnak icindeyse bosluklar onemli token devam eder
+		gecici bufferda biriken string varsa create_token ile listeye ekler
+		bosluk karakteri yeni bir token degildir
 	
-	ornegin:
-		echo "bonjour    tout le monde"
-		tokens :"echo" ve "bonjour    tout le monde"
+
+	*** tokenizer icerisinde buffer ve buf_len olusturmak gerekecek. 
+	***
 	
-	ornegin: 
-		echo a '' b
-		tokens : "a", "", "b"
-		
-	---> ' ' ICI BOS AMA TIRNAKLAR QUOTED OLDUGU ICIN BU TOKEN DIR. 
-	---> EGER TIRNAKSIZ BOSLUKLAR OLSAYDI BU TOKEN OLARAK DEGERLENDIRILMEYECEKTI. 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // t_token	handle_comment();
 // t_token	append_to_word();
 // t_token start_new_word();
