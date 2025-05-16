@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:24 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/16 16:31:31 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:36:00 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	check_quote_state(char *input)
 	}
 	if (quote_state != NONE)
 	{
-		msg_error(ERR_QUOTE);
+		ft_putstr_fd(ERR_QUOTE, STDERR_FILENO);
 		return(ERROR);
 	}
 	return (SUCCESS);

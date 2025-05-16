@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:53:05 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/16 16:21:46 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:36:31 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ typedef enum s_quote
 
 typedef struct s_token
 {
-	char	*str;
-	t_type	type;
-	t_quote	quote;
-	bool	has_expansion;
-	struct s_token *next;
+	char			*str;
+	t_type			type;
+	t_quote			quote;
+	bool			has_expansion;
+	struct s_token	*next;
 }	t_token;
 
 typedef struct s_redir
@@ -121,9 +121,11 @@ bool	check_redirection_syntax(char *input, int i);
 int		process_input(char *input);
 
 
-//TOKENS
+//TOKEN UTILS
 t_type	get_token_type(char *str);
 t_token	*create_token(t_token **head, char *str, t_type type, t_quote quote);
+
+//TOKENS
 bool	check_eof(char *input, char **current_token, t_token **tokens);
 bool	is_single_redir(char c);
 bool	is_double_redir(char *input , int i);
@@ -134,11 +136,5 @@ bool	operator_start(char c);
 t_quote	get_quote_type(char *str);
 int		check_quote_state(char *input);
 
-
-
-
-
-//EXEC
-void	msg_error(char *msg);
 
 #endif

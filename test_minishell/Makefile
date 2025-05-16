@@ -2,8 +2,7 @@ NAME		= minishell
 
 RM			= rm -f
 SRCS_MAIN	= main.c
-SRCS		= exit.c \
- 			parsing0_0.c \
+SRCS		= parsing0_0.c \
 			parsing0_1.c \
 			quotes.c \
 			token_utils.c \
