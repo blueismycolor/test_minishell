@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:55 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/14 19:27:58 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:30:00 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ t_token 	*create_token(t_token **head, char *str, t_type type, t_quote quote)
 		return (NULL);
 	new_token->str = ft_strdup(str);
 	if (!new_token->str)
-	{
-		free (new_token);
-		return (NULL);
-	}
+		return(free(new_token), NULL);
 	new_token->type = type;
 	new_token->quote = quote;
 	new_token->has_expansion = false;

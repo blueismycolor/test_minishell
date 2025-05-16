@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 14:08:26 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/14 19:28:16 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:29:25 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,32 +101,6 @@ bool	operator_start(char c)
 
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-	HAS_EXPANSION
-	eger tek tirnak ise icindeki her sey oldugu gibi disari cikar
-	ama eger cift tirnaksa ve icerisinde $ isareti var ise burada expansion var demektir.
-	strchr fonksiyonu ile $ sembolu aranir, eger var ise bu karakterin adresi dondurulur
-	ve true doner.
-*/
 
 /*	QUOTED_TOKEN
 	Amacimiz: tirnak ile basliyorsa icerigi al ve current token'a yaz.
