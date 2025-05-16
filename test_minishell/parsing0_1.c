@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 18:42:47 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/15 13:10:21 by aeudes           ###   ########.fr       */
+/*   Created: 2025/05/12 16:43:27 by aeudes            #+#    #+#             */
+/*   Updated: 2025/05/16 16:22:33 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,53 +17,158 @@ int	process_input(char *input)
 	if (!validate_input(input))
 		return (ERROR);
 	return (SUCCESS);
-	
+}
+
+bool	validate_input(char *input)
+{
+	if (!check_pipe_syntax(input, 0))
+		return false;
+	if (!check_quote_syntax(input, 0))
+		return false;
+	if (!check_redirection_syntax(input, 0))
+		return false;
+	return true;
+}
+
+bool	check_pipe_syntax(char *input, int i)
+{
+	int		j;
+	char	quote;
+
+	quote = 0;
+	if (input[0] == '|')
+		return (ft_putstr_fd(ERR_SYN, STDERR_FILENO), false);
+	while (input[i])
+	{
+		if((input[i] == '\'' || input[i] == '\"') && quote == 0)
+			quote = input[i];
+		else if (input[i] == quote)
+			quote = 0;
+		if (quote == 0 && input[i] =='|')
+		{
+			if (input[i + 1] == '\0')
+				return (ft_putstr_fd(ERR_SYN, STDERR_FILENO), false);
+			j = i + 1;
+			while (input[j] == ' ')
+				j++;
+			if (input[j] == '|')
+				return (ft_putstr_fd(ERR_SYN, STDERR_FILENO), false);
+		}
+		i++;
+	}
+	return (true);
 }
 
 
+int	check_quote_syntax(char *input, int i)
+{
+	while (input[i] && input[i] != '|' && input[i] != '>' && input[i] != '<')
+	{
+		if (input[i] == '\'')
+		{
+			i++;
+			while (input[i] && input[i] != '\'')
+				i++;
+			if (input[i] == '\0')
+				return (ft_putstr_fd(OPEN_SNG_QUOTE, STDERR_FILENO), ERROR);
+		}
+		else if (input[i] == '\"')
+		{
+			i++;
+			while (input[i]  && input[i] != '\"')
+				i++;
+			if (input[i] == '\0')
+				return (ft_putstr_fd(OPEN_DBL_QUOTE, STDERR_FILENO), ERROR);
+		}
+		i++;
+	}
+	return (i);
+}
+bool		check_redirection_syntax(char *input, int i)
+{
+	int	j;
 
 
-// bool process_input_line(t_data *data, char *input_line)
-// {
-// 	t_cmd	*cmd;
-	
-// 	if (!input_line || !*input_line)
-// 	{
-// 		data->return_value = 0;
-// 		return (false);
-// 	}
-// 	//printf("received input: %s\n", input_line);
-// 	cmd = malloc(sizeof(t_cmd));
-// 	if (!cmd)
-// 	{
-// 		ft_putstr_fd(ERR_MALLOC, STDERR_FILENO);
-// 		return (false);
-// 	}
-// 	ft_memset(cmd, 0, sizeof(t_cmd));
-// 	cmd->cmd = ft_strdup(input_line);
-// 	cmd->type = CMD;
-// 	data->cmd = cmd;
-// 	return (true);
-// }
+	while (input[i])
+	{
+		if ((input[i] == '<' || input[i] == '>') && !is_in_quotes(input, i)
+			&& !is_in_double_quotes(input, i))
+		{
+			if ((input[i] == '<' && input[i + 1] == '>')
+				|| (input[i] == '>' && input[i + 1] == '<')
+				|| (input[i] == '<' && input[i + 1] == '<'
+					&& (input[i + 2] == '<' || input[i + 2] == '>'))
+				|| (input[i] == '>' && input[i + 1] == '>'
+					&& (input[i + 2] == '<' || input[i + 2] == '>')))
+					return (ft_putstr_fd(ERR_SYN, STDERR_FILENO), false);
+				j = i + 1;
+				while (input[j] || input[j] == ' ')
+					j++; 
+				if (input[j] == '\0' || input[j] == '<' || input[j] == '>' || input[j] == '|')
+					return (ft_putstr_fd(ERR_SYN, STDERR_FILENO), false);
+		}
+		i++;
+	}
+	return (true);
+}
 
 /*
-Créer le point de départ du traitement en récupérant l'entrée que 
-utilisateur donnée au shell, par exemple "ls -l | grep txt".
+	eger  < veya > tirnak icinde ise redirection degil "x > y"
+	eger  < veya > tirnak icinde degilse redirection.  x > y
+	karsilikli olanlar hatali <> ><
+	<<< <<> hatali
+	>>> >>< hatali
+	j redirectiondan hemen sonraki karaktere isaret eder,
+	bu bir bosluk ise atlanir
+	ornegin echo > gibi bir girdi var ise >den sonra gelen bosluklar burada gecerlidir.
+	
 
-Il vérifie la chaîne char *input_line reçue(pour voir si elle est vide ou valide).
+	echo > ---> >'den sonra hicbir sey yok bu hata
+	echo > ---> sadece bosluk var yine hicbir sey yok bu hata
+	echo > > file bu hata
+	echo > file.txt bu dogru
+	cat < input.txt bu hata
 
-Il associe cette entrée à la structure t_data qui contient l'état général du shell.
-Par exemple : le champ cmd de data reçoit la première structure de commande.
+*/
 
-Il prépare la base pour les étapes suivantes comme le tokenizer ou le parser.
-Plus tard, l'entrée y sera divisée en parties.
 
-ft_memset est utilisé pour réinitialiser les pointeurs, entiers et booléens,
-afin de pouvoir les réutiliser correctement
-et pour initialiser sans erreur les structures ou tableaux.
+/*
+	acilan tirnak kapanmamissa hata
 
-En résumé, c'est la fonction de démarrage utilisée 
-pour commencer à traiter la chaîne d'entrée utilisateur
-et l'intégrer correctement dans la structure de données t_data du shell.
+	ic ice tirnak kullanimi hata
+	
+	tirnak acildiginda icerigi bir butun olarak kabul edilmeli split yapilmamali
 
+	baslangic ve sondaki tirnaklar dogru bir sekilde eslesmeli
+	
+	tirnak icinde | < > vs var ise yok sayilmali (ancak "tirnak arasi $USER" var ise expansion)
+	
+*/
+
+
+/* PIPE KONTROLU 
+
+Başta pipe var mı diye kontrol ettik. Başta pipe kesinlikle hata.
+
+Pipe sonda mı diye kontrol ettik. Sonunda pipe varsa hata.
+
+Pipe arka arkaya var mı diye kontrol ettik. Arka arkaya || olursa hata.
+
+Pipe tırnak içinde ise görmezden gelindi. (quote değişkeni ile)
+
+Pipe'dan sonra boşluklar varsa geçildi, sonra kontrol yapıldı.
+
+*/
+
+/*
+Si un pipe est au début :
+	Ex : | ls → erreur
+Si un pipe est à la fin :
+	Ex : ls | → erreur
+S’il y a un espace vide entre deux pipes :
+	Ex : ls | | wc → erreur
+S’il y a plusieurs pipes consécutifs :
+	Ex : ls || wc → erreur (tu l’as déjà vérifié)
+Les pipes à l’intérieur des guillemets doivent être ignorés.
+	Ex : "echo | test" → valide, car le | est entre guillemets
 */

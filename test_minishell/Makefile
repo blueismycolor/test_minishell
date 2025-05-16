@@ -5,19 +5,17 @@ SRCS_MAIN	= main.c
 SRCS		= exit.c \
  			parsing0_0.c \
 			parsing0_1.c \
-			parsing0_2.c \
 			quotes.c \
 			token_utils.c \
-			tokenize_part1.c \
-			tokenize_part2.c
+			tokenize_part1.c
 
 
-LIBFT_DIR   = libft-complete
-LIBFT       = $(LIBFT_DIR)/libft-complete.a
+LIBFT_DIR	= libft-complete
+LIBFT		= $(LIBFT_DIR)/libft-complete.a
 
-CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -I$(LIBFT_DIR) -g
-LFLAG       = -lreadline 
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -I$(LIBFT_DIR) -g
+LFLAG		= -lreadline 
 
 OBJS_MAIN   = $(SRCS_MAIN:.c=.o) $(SRCS:.c=.o)
 

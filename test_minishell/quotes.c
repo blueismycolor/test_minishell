@@ -6,20 +6,27 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:24 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/14 20:57:56 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 15:45:32 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-on ignore les parties entre guillemets et retourne l’indice où le guillemet fermant est trouvé.
 
-L’objectif ici est d’éviter de découper les caractères spéciaux 
-se trouvant à l’intérieur des guillemets,
-comme dans "hello | world", lors de l’étape de séparation en tokens.
-*/
+int	is_space(char c)
+{
+	return ( c == ' ' || (c >= 9 && c <= 13));
+}
 
+int	skip_space(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] && is_space(input[i]))
+		i++;
+	return(i);
+}
 
 t_quote	get_quote_type(char *str)
 {

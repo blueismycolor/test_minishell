@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:53:05 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/15 14:41:11 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:21:46 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,26 @@
 # include "../libft-complete/ft_printf/ft_printf.h"
 
 
-# define EMPTY_COMMAND			"Error: command is empty.\n"
 # define ERR_PIPE				"Error: failed to create pipe.\n"
-# define UNCLOSED_BRACE			"Error: failed to close brace.\n"
 # define ERR_REDIR				"Error: invalid redirection.\n"
 # define ERR_MALLOC				"Error: memory allocation failed,\n"
 # define ERR_QUOTE				"Error: unmatched or invalid quote.\n"
+# define OPEN_SNG_QUOTE			"Error: unclosed single quote.\n"
+# define OPEN_DBL_QUOTE			"Error: unclosed double quote.\n"
 # define ERR_CMD				"Error: command execution failed.\n"
-# define UNCLOSED_QUOTES		"Error: unclosed quote.\n"
 # define ERR_EXECVE				"Error: execve system call failed.\n"
-# define ERR_FORK				"fork failed.\n"
-# define ERR_DUP				"dup failed.\n"
-# define NO_PATH				"no such file or directory.\n"
-# define ERR_EOF				"unexpected EOF.\n"
-# define TOO_LONG				"argument list too long.\n"
-# define ERR_VA_ENV				"unboud variable.\n"			// Erreur avec variable non initialisee (set -u)
-# define ERR_SYN				"syntax error in expression.\n"	// Manque un i++ ou qqch dans le genre
-# define ERR_FD					"bad file descriptor.\n"		// Fermeture accidentelle dun fd
+# define ERR_FORK				"Error: fork failed.\n"
+# define ERR_DUP				"Error: dup failed.\n"
+# define NO_PATH				"Error: no such file or directory.\n"
+# define ERR_EOF				"Error: unexpected EOF.\n"
+# define TOO_LONG				"Error: argument list too long.\n"
+# define ERR_VA_ENV				"Error: unboud variable.\n"			// Erreur avec variable non initialisee (set -u)
+# define ERR_SYN				"Error: syntax error in expression.\n"	// Manque un i++ ou qqch dans le genre
+# define ERR_FD					"Error: bad file descriptor.\n"		// Fermeture accidentelle dun fd
 # define SUCCESS				0
 # define ERROR					-1
+# define FAIL					1
+
 
 
 typedef enum s_type
@@ -70,7 +71,6 @@ typedef struct s_token
 	char	*str;
 	t_type	type;
 	t_quote	quote;
-	bool	is_null;
 	bool	has_expansion;
 	struct s_token *next;
 }	t_token;
@@ -110,6 +110,15 @@ typedef struct s_data
 //PARSING UTILS
 int		is_space(char c);
 int		skip_space(char *input);
+bool	is_in_quotes(char *input, int i);
+bool	is_in_double_quotes(char *input, int i);
+
+//PARSING
+bool	validate_input(char *input);
+bool	check_pipe_syntax(char *input, int i);
+int		check_quote_syntax(char *input, int i);
+bool	check_redirection_syntax(char *input, int i);
+int		process_input(char *input);
 
 
 //TOKENS
@@ -126,11 +135,7 @@ t_quote	get_quote_type(char *str);
 int		check_quote_state(char *input);
 
 
-bool 	validate_input(char *input, t_token *tokens);
-bool 	check_pipe_syntax(char *input);
-int		check_quote_syntax(char *input, int i);
-bool	check_redirection_syntax(t_token *tokens);
-int		process_input(char *input);
+
 
 
 //EXEC

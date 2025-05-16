@@ -6,30 +6,47 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:56:31 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/15 13:06:19 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 15:45:20 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_space(char c)
+bool		is_in_quotes(char *input, int i)
 {
-	return ( c == ' ' || (c >= 9 && c <= 13));
+	int index;
+	int	quote_count;
+	
+	index = 0;
+	quote_count = 0;
+	while (index < i)
+	{
+		if (input[index] == '\'')
+			quote_count++;
+		index++;
+	}
+	if (quote_count % 2 != 0)
+		return (true);
+	return (false);
 }
 
-int	skip_space(char *input)
+bool		is_in_double_quotes(char *input, int i)
 {
-	int	i;
+	int	index;
+	int	quote_count;
 
-	i = 0;
-	while (input[i] && is_space(input[i]))
-		i++;
-	return(i);
+	index = 0;
+	quote_count = 0;
+	while (index < i)
+	{
+		if (input[index] == '"')
+			quote_count++;
+		index++;
+	}
+	if (quote_count % 2 != 0)
+		return (true);
+	return (false);
 }
-
-
-
-
 
 
 
