@@ -6,7 +6,7 @@
 /*   By: aeudes <aeudes@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:57:55 by aeudes            #+#    #+#             */
-/*   Updated: 2025/05/16 16:31:46 by aeudes           ###   ########.fr       */
+/*   Updated: 2025/05/16 17:45:12 by aeudes           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ int	skip_space(char *input)
 	return(i);
 }
 
-t_type get_token_type(char *str)
+t_type get_token_type(char *input)
 {
-	if (ft_strncmp(str, ">>", 2) == 0)
+	if (ft_strncmp(input, ">>", 2) == 0)
 		return (APPEND);
-	else if (ft_strncmp(str, "<<", 2) == 0)
+	else if (ft_strncmp(input, "<<", 2) == 0)
 		return (HEREDOC);
-	else if (ft_strncmp(str, ">", 1) == 0)
+	else if (ft_strncmp(input, ">", 1) == 0)
 		return (TRUNC);
-	else if (ft_strncmp(str, "<", 1) == 0)
+	else if (ft_strncmp(input, "<", 1) == 0)
 		return (INPUT);
-	else if (ft_strncmp(str, "|", 1) == 0)
+	else if (ft_strncmp(input, "|", 1) == 0)
 		return (PIPE);
 	else
 		return (CMD);
@@ -54,7 +54,7 @@ t_token 	*create_token(t_token **head, char *str, t_type type, t_quote quote)
 		return (NULL);
 	new_token->str = ft_strdup(str);
 	if (!new_token->str)
-		return(free(new_token), NULL);
+		return(free(new_token), NULL); // free new token ? 
 	new_token->type = type;
 	new_token->quote = quote;
 	new_token->has_expansion = false;
